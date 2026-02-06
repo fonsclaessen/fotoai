@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
-import ProtectedRoute from '@/components/ProtectedRoute';
+import AdminProtectedRoute from '@/components/AdminProtectedRoute';
 
 interface Album {
     id: string;
@@ -36,7 +36,7 @@ export default function AdminPage() {
     }, []);
 
     return (
-        <ProtectedRoute>
+        <AdminProtectedRoute>
             <div className="min-h-screen bg-slate-100 dark:bg-slate-900">
                 <Navbar />
                 <main className="max-w-6xl mx-auto px-4 py-8">
@@ -127,6 +127,6 @@ export default function AdminPage() {
                     </div>
                 </main>
             </div>
-        </ProtectedRoute>
+        </AdminProtectedRoute>
     );
 }

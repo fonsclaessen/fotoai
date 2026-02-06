@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
-import ProtectedRoute from '@/components/ProtectedRoute';
+import AdminProtectedRoute from '@/components/AdminProtectedRoute';
 
 interface Photo {
     id: string;
@@ -96,19 +96,19 @@ export default function AdminAlbumPage() {
 
     if (isLoading) {
         return (
-            <ProtectedRoute>
+            <AdminProtectedRoute>
                 <div className="min-h-screen bg-slate-100 dark:bg-slate-900">
                     <Navbar />
                     <div className="flex items-center justify-center h-[60vh]">
                         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary-500"></div>
                     </div>
                 </div>
-            </ProtectedRoute>
+            </AdminProtectedRoute>
         );
     }
 
     return (
-        <ProtectedRoute>
+        <AdminProtectedRoute>
             <div className="min-h-screen bg-slate-100 dark:bg-slate-900">
                 <Navbar />
                 <main className="max-w-6xl mx-auto px-4 py-8">
@@ -233,6 +233,6 @@ export default function AdminAlbumPage() {
                     )}
                 </main>
             </div>
-        </ProtectedRoute>
+        </AdminProtectedRoute>
     );
 }
