@@ -16,9 +16,9 @@ services:
       # Persistent photo albums
       - ./public/albums:/app/public/albums
     command: >
-      sh -c "node node_modules/.bin/prisma migrate deploy &&
-             node node_modules/.bin/prisma db seed || true &&
-             node server.js"
+      sh -c "npx prisma migrate deploy &&
+             npx prisma db seed || true &&
+             npx next start -p 3000 -H 0.0.0.0"
     healthcheck:
       test: [ "CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000" ]
       interval: 30s
