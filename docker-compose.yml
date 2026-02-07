@@ -5,6 +5,7 @@ services:
     restart: unless-stopped
     ports:
       - "3000:3000"
+      - "5555:5555"
     environment:
       - DATABASE_URL=file:/app/data/db.sqlite
     volumes:
