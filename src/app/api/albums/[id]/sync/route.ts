@@ -34,15 +34,30 @@ export async function POST(
         const files = fs.readdirSync(folderPath);
         const imageFiles = files.filter((file) => {
             const ext = path.extname(file).toLowerCase();
+            // Exclude cover.jpg from photo list
+            if (file.toLowerCase() === 'cover.jpg') return false;
             return ['.jpg', '.jpeg', '.png', '.gif', '.webp'].includes(ext);
         });
+        const imageFilesSet = new Set(imageFiles);
 
         // Get existing photos
         const existingPhotos = await prisma.photo.findMany({
             where: { albumId: id },
-            select: { filename: true },
+            select: { id: true, filename: true },
         });
         const existingFilenames = new Set(existingPhotos.map((p) => p.filename));
+
+        // Find photos to delete (in DB but not in folder)
+        const photosToDelete = existingPhotos
+            .filter((p) => !imageFilesSet.has(p.filename))
+            .map((p) => p.id);
+
+        // Delete removed photos from database
+        if (photosToDelete.length > 0) {
+            await prisma.photo.deleteMany({
+                where: { id: { in: photosToDelete } },
+            });
+        }
 
         // Add new photos
         const newPhotos = imageFiles
@@ -61,7 +76,8 @@ export async function POST(
         }
 
         return NextResponse.json({
-            synced: newPhotos.length,
+            added: newPhotos.length,
+            removed: photosToDelete.length,
             total: imageFiles.length,
         });
     } catch (error) {

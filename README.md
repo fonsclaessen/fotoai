@@ -60,10 +60,12 @@ Or register a new account on the login page.
    ```
    public/albums/
    ├── Album1/
+   │   ├── cover.jpg          ← Album cover image (optional)
    │   ├── photo1.jpg
    │   ├── photo2.jpg
    │   └── ...
    ├── Album2/
+   │   ├── cover.jpg
    │   └── ...
    └── Album3/
        └── ...
@@ -72,6 +74,23 @@ Or register a new account on the login page.
 2. Create albums in the database that reference these folders (use `folderName` field)
 
 3. The API automatically scans folders for images (.jpg, .jpeg, .png, .gif, .webp)
+
+### Cover Images
+
+To set a cover image for an album, place a file named `cover.jpg` in the album folder:
+
+```
+public/albums/Album1/cover.jpg
+Voer dan ook weer een restart uit, anders bad request 400 : docker compose restart app
+
+```
+
+The app automatically looks for this file and uses it as the album thumbnail. If no `cover.jpg` exists, a placeholder icon is shown.
+
+**Tips:**
+- Use landscape orientation (4:3 ratio works best)
+- Recommended size: 800x600 pixels or larger
+- Only `.jpg` format is supported for auto-detection (or set manually in database)
 
 ## Project Structure
 

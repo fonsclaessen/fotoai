@@ -1,6 +1,10 @@
 {
-  "/api/albums/route": "app/api/albums/route.js",
-  "/albums/[id]/page": "app/albums/[id]/page.js",
+  "/_not-found/page": "app/_not-found/page.js",
   "/albums/page": "app/albums/page.js",
-  "/api/albums/[id]/route": "app/api/albums/[id]/route.js"
+  "/api/albums/route": "app/api/albums/route.js",
+  "/api/albums/[id]/route": "app/api/albums/[id]/route.js",
+  "/albums/[id]/page": "app/albums/[id]/page.js",
+  "/admin/page": "app/admin/page.js",
+  "/admin/albums/[id]/page": "app/admin/albums/[id]/page.js",
+  "/api/albums/[id]/sync/route": "app/api/albums/[id]/sync/route.js"
 }

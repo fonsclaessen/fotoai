@@ -60,7 +60,11 @@ export default function AdminAlbumPage() {
             });
             const data = await response.json();
             if (response.ok) {
-                setMessage(`✅ ${data.synced} nieuwe foto's toegevoegd (totaal: ${data.total})`);
+                const parts = [];
+                if (data.added > 0) parts.push(`${data.added} toegevoegd`);
+                if (data.removed > 0) parts.push(`${data.removed} verwijderd`);
+                if (parts.length === 0) parts.push('geen wijzigingen');
+                setMessage(`✅ Sync voltooid: ${parts.join(', ')} (totaal: ${data.total})`);
                 fetchAlbum(); // Refresh the list
             } else {
                 setMessage(`❌ Error: ${data.error}`);

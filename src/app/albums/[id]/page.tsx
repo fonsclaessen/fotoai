@@ -1,8 +1,9 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
+import JSZip from 'jszip';
 import { sampleAlbums, generatePhotosForAlbum, Photo, Album } from '@/data/albums';
 import PhotoGrid from '@/components/PhotoGrid';
 import Lightbox from '@/components/Lightbox';
@@ -16,6 +17,9 @@ export default function AlbumDetailPage() {
     const [photos, setPhotos] = useState<Photo[]>([]);
     const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
     const [isLoading, setIsLoading] = useState(true);
+    const [selectionMode, setSelectionMode] = useState(false);
+    const [selectedPhotos, setSelectedPhotos] = useState<Set<string>>(new Set());
+    const [isDownloading, setIsDownloading] = useState(false);
 
     useEffect(() => {
         async function fetchAlbum() {
@@ -72,6 +76,65 @@ export default function AlbumDetailPage() {
     const goToNext = () => {
         if (lightboxIndex !== null && lightboxIndex < photos.length - 1) {
             setLightboxIndex(lightboxIndex + 1);
+        }
+    };
+
+    const toggleSelectionMode = () => {
+        setSelectionMode(!selectionMode);
+        setSelectedPhotos(new Set());
+    };
+
+    const togglePhotoSelect = useCallback((photoId: string) => {
+        setSelectedPhotos((prev) => {
+            const next = new Set(prev);
+            if (next.has(photoId)) {
+                next.delete(photoId);
+            } else {
+                next.add(photoId);
+            }
+            return next;
+        });
+    }, []);
+
+    const selectAll = () => {
+        if (selectedPhotos.size === photos.length) {
+            setSelectedPhotos(new Set());
+        } else {
+            setSelectedPhotos(new Set(photos.map((p) => p.id)));
+        }
+    };
+
+    const downloadSelected = async () => {
+        const selected = photos.filter((p) => selectedPhotos.has(p.id));
+        if (selected.length === 0) return;
+
+        setIsDownloading(true);
+        try {
+            const zip = new JSZip();
+
+            // Download all photos and add to ZIP
+            for (const photo of selected) {
+                const response = await fetch(photo.src);
+                const blob = await response.blob();
+                // Extract filename from src
+                const filename = photo.src.split('/').pop() || `${photo.title}.jpg`;
+                zip.file(filename, blob);
+            }
+
+            // Generate ZIP and download
+            const zipBlob = await zip.generateAsync({ type: 'blob' });
+            const url = URL.createObjectURL(zipBlob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${album?.title || 'photos'}.zip`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        } catch (error) {
+            console.error('Download error:', error);
+        } finally {
+            setIsDownloading(false);
         }
     };
 
@@ -188,15 +251,88 @@ export default function AlbumDetailPage() {
                         </p>
                     </div>
 
+                    {/* Toolbar */}
+                    <div className="flex items-center justify-between mb-4">
+                        <div className="flex items-center gap-2">
+                            {selectionMode && (
+                                <>
+                                    <button
+                                        onClick={selectAll}
+                                        className="text-sm text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 font-medium"
+                                    >
+                                        {selectedPhotos.size === photos.length ? 'Deselecteer alles' : 'Selecteer alles'}
+                                    </button>
+                                    <span className="text-sm text-slate-400 dark:text-slate-500">
+                                        {selectedPhotos.size > 0 && `${selectedPhotos.size} geselecteerd`}
+                                    </span>
+                                </>
+                            )}
+                        </div>
+                        <button
+                            onClick={toggleSelectionMode}
+                            className={`p-2 rounded-lg transition-colors ${selectionMode
+                                ? 'bg-primary-100 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400'
+                                : 'text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700'
+                                }`}
+                            title={selectionMode ? 'Annuleer selectie' : 'Selecteer foto\'s'}
+                        >
+                            {selectionMode ? (
+                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            ) : (
+                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                            )}
+                        </button>
+                    </div>
+
                     {/* Photo Grid */}
                     {photos.length > 0 ? (
-                        <PhotoGrid photos={photos} onPhotoClick={openLightbox} />
+                        <PhotoGrid
+                            photos={photos}
+                            onPhotoClick={openLightbox}
+                            selectionMode={selectionMode}
+                            selectedPhotos={selectedPhotos}
+                            onToggleSelect={togglePhotoSelect}
+                        />
                     ) : (
                         <div className="flex items-center justify-center h-64">
                             <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-primary-500"></div>
                         </div>
                     )}
                 </main>
+
+                {/* Floating download bar */}
+                {selectionMode && selectedPhotos.size > 0 && (
+                    <div className="fixed bottom-0 left-0 right-0 z-40 bg-white/95 dark:bg-slate-800/95 backdrop-blur-sm border-t border-slate-200 dark:border-slate-700 px-4 py-3 sm:py-4">
+                        <div className="max-w-7xl mx-auto flex items-center justify-between">
+                            <span className="text-sm sm:text-base font-medium text-slate-700 dark:text-slate-200">
+                                {selectedPhotos.size} foto{selectedPhotos.size !== 1 ? '\'s' : ''} geselecteerd
+                            </span>
+                            <button
+                                onClick={downloadSelected}
+                                disabled={isDownloading}
+                                className="inline-flex items-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-700 disabled:bg-primary-400 text-white rounded-lg font-medium transition-colors"
+                            >
+                                {isDownloading ? (
+                                    <>
+                                        <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                                        Downloaden...
+                                    </>
+                                ) : (
+                                    <>
+                                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                                        </svg>
+                                        Download
+                                    </>
+                                )}
+                            </button>
+                        </div>
+                    </div>
+                )}
 
                 {/* Lightbox */}
                 {lightboxIndex !== null && (
