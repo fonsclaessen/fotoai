@@ -16,6 +16,9 @@ export async function GET(
             include: {
                 photos: {
                     orderBy: { filename: 'asc' },
+                    include: {
+                        _count: { select: { comments: true } },
+                    },
                 },
             },
         });
@@ -28,7 +31,18 @@ export async function GET(
         }
 
         // If no photos in DB, scan the folder
-        let photos = album.photos;
+        let photos: Array<{
+            id: string;
+            filename: string;
+            path: string;
+            title: string | null;
+            width: number | null;
+            height: number | null;
+            createdAt: Date;
+            updatedAt: Date;
+            albumId: string;
+            _count?: { comments: number };
+        }> = album.photos;
         if (photos.length === 0) {
             const folderPath = path.join(process.cwd(), 'public', 'albums', album.folderName);
 
@@ -64,6 +78,7 @@ export async function GET(
                 title: photo.title || photo.filename,
                 width: photo.width || 1200,
                 height: photo.height || 800,
+                commentCount: photo._count?.comments ?? 0,
             })),
         });
     } catch (error) {

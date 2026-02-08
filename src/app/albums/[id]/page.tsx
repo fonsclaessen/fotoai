@@ -138,6 +138,12 @@ export default function AlbumDetailPage() {
         }
     };
 
+    const handleCommentCountChange = useCallback((photoId: string, count: number) => {
+        setPhotos(prev => prev.map(p =>
+            p.id === photoId ? { ...p, commentCount: count } : p
+        ));
+    }, []);
+
     if (isLoading) {
         return (
             <ProtectedRoute>
@@ -342,6 +348,7 @@ export default function AlbumDetailPage() {
                         onClose={closeLightbox}
                         onPrev={goToPrevious}
                         onNext={goToNext}
+                        onCommentCountChange={handleCommentCountChange}
                     />
                 )}
             </div>

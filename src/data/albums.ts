@@ -5,6 +5,7 @@ export interface Photo {
     title: string;
     width: number;
     height: number;
+    commentCount?: number;
 }
 
 export interface Album {

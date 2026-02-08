@@ -42,10 +42,10 @@ export default function PhotoGrid({
                             alt={photo.title}
                             fill
                             className={`object-cover transition-all duration-300 ${selectionMode
-                                    ? isSelected
-                                        ? 'scale-95 brightness-90'
-                                        : 'group-hover:scale-105'
-                                    : 'group-hover:scale-110'
+                                ? isSelected
+                                    ? 'scale-95 brightness-90'
+                                    : 'group-hover:scale-105'
+                                : 'group-hover:scale-110'
                                 }`}
                             sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1024px) 25vw, 20vw"
                         />
@@ -55,8 +55,8 @@ export default function PhotoGrid({
                             <div className="absolute top-2 left-2 z-10">
                                 <div
                                     className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all ${isSelected
-                                            ? 'bg-primary-500 border-primary-500'
-                                            : 'bg-black/30 border-white/80 group-hover:bg-black/50'
+                                        ? 'bg-primary-500 border-primary-500'
+                                        : 'bg-black/30 border-white/80 group-hover:bg-black/50'
                                         }`}
                                 >
                                     {isSelected && (
@@ -90,6 +90,16 @@ export default function PhotoGrid({
                                     </div>
                                 </div>
                             </>
+                        )}
+
+                        {/* Comment count badge */}
+                        {!selectionMode && (photo.commentCount ?? 0) > 0 && (
+                            <div className="absolute bottom-2 right-2 z-10 flex items-center gap-1 bg-black/60 text-white text-xs rounded-full px-2 py-0.5">
+                                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                                </svg>
+                                {photo.commentCount}
+                            </div>
                         )}
 
                         {/* Selection overlay */}
