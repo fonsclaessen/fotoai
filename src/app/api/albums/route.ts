@@ -50,7 +50,7 @@ export async function GET() {
 // POST create new album
 export async function POST(request: NextRequest) {
     try {
-        const { title, description, folderName, userId, date } = await request.json();
+        const { title, description, folderName, date } = await request.json();
 
         // Verify the folder exists
         const folderPath = path.join(process.cwd(), 'public', 'albums', folderName);
@@ -59,12 +59,26 @@ export async function POST(request: NextRequest) {
             fs.mkdirSync(folderPath, { recursive: true });
         }
 
+        // Find admin user or first user as owner
+        let adminUser = await prisma.user.findFirst({
+            where: { isAdmin: true },
+        });
+        if (!adminUser) {
+            adminUser = await prisma.user.findFirst();
+        }
+        if (!adminUser) {
+            return NextResponse.json(
+                { error: 'No user found to assign album to' },
+                { status: 400 }
+            );
+        }
+
         const album = await prisma.album.create({
             data: {
                 title,
                 description,
                 folderName,
-                userId,
+                userId: adminUser.id,
                 date: date ? new Date(date) : new Date(),
             },
         });
