@@ -17,23 +17,57 @@ interface Album {
 export default function AdminPage() {
     const [albums, setAlbums] = useState<Album[]>([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [showNewForm, setShowNewForm] = useState(false);
+    const [newAlbum, setNewAlbum] = useState({ title: '', folderName: '', description: '' });
+    const [isCreating, setIsCreating] = useState(false);
+    const [message, setMessage] = useState('');
+
+    async function fetchAlbums() {
+        try {
+            const response = await fetch('/api/albums');
+            if (response.ok) {
+                const data = await response.json();
+                setAlbums(data);
+            }
+        } catch (error) {
+            console.error('Error fetching albums:', error);
+        } finally {
+            setIsLoading(false);
+        }
+    }
 
     useEffect(() => {
-        async function fetchAlbums() {
-            try {
-                const response = await fetch('/api/albums');
-                if (response.ok) {
-                    const data = await response.json();
-                    setAlbums(data);
-                }
-            } catch (error) {
-                console.error('Error fetching albums:', error);
-            } finally {
-                setIsLoading(false);
-            }
-        }
         fetchAlbums();
     }, []);
+
+    async function createAlbum(e: React.FormEvent) {
+        e.preventDefault();
+        if (!newAlbum.title || !newAlbum.folderName) return;
+
+        setIsCreating(true);
+        setMessage('');
+        try {
+            const response = await fetch('/api/albums', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(newAlbum),
+            });
+            if (response.ok) {
+                setMessage('✅ Album aangemaakt! Ga naar "Foto\'s Beheren" om te syncen.');
+                setNewAlbum({ title: '', folderName: '', description: '' });
+                setShowNewForm(false);
+                fetchAlbums();
+            } else {
+                const data = await response.json();
+                setMessage(`❌ Error: ${data.error}`);
+            }
+        } catch (error) {
+            setMessage('❌ Error creating album');
+            console.error(error);
+        } finally {
+            setIsCreating(false);
+        }
+    }
 
     return (
         <AdminProtectedRoute>
@@ -49,13 +83,93 @@ export default function AdminPage() {
                                 Beheer foto titels en beschrijvingen
                             </p>
                         </div>
-                        <Link
-                            href="/albums"
-                            className="px-4 py-2 bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-lg hover:bg-slate-300 dark:hover:bg-slate-600"
-                        >
-                            ← Terug naar Albums
-                        </Link>
+                        <div className="flex gap-2">
+                            <button
+                                onClick={() => setShowNewForm(!showNewForm)}
+                                className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-500"
+                            >
+                                + Nieuw Album
+                            </button>
+                            <Link
+                                href="/albums"
+                                className="px-4 py-2 bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-lg hover:bg-slate-300 dark:hover:bg-slate-600"
+                            >
+                                ← Terug
+                            </Link>
+                        </div>
                     </div>
+
+                    {message && (
+                        <div className="mb-4 p-4 bg-white dark:bg-slate-800 rounded-lg shadow">
+                            {message}
+                        </div>
+                    )}
+
+                    {showNewForm && (
+                        <div className="mb-6 p-6 bg-white dark:bg-slate-800 rounded-xl shadow">
+                            <h2 className="text-lg font-semibold text-slate-800 dark:text-white mb-4">
+                                Nieuw Album Aanmaken
+                            </h2>
+                            <form onSubmit={createAlbum} className="space-y-4">
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+                                            Titel *
+                                        </label>
+                                        <input
+                                            type="text"
+                                            value={newAlbum.title}
+                                            onChange={(e) => setNewAlbum({ ...newAlbum, title: e.target.value })}
+                                            placeholder="Vakantie 2025"
+                                            className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-800 dark:text-white"
+                                            required
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+                                            Folder Naam * <span className="text-xs text-slate-500">(exact zoals in public/albums/)</span>
+                                        </label>
+                                        <input
+                                            type="text"
+                                            value={newAlbum.folderName}
+                                            onChange={(e) => setNewAlbum({ ...newAlbum, folderName: e.target.value })}
+                                            placeholder="Album4"
+                                            className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-800 dark:text-white"
+                                            required
+                                        />
+                                    </div>
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+                                        Beschrijving
+                                    </label>
+                                    <input
+                                        type="text"
+                                        value={newAlbum.description}
+                                        onChange={(e) => setNewAlbum({ ...newAlbum, description: e.target.value })}
+                                        placeholder="Foto's van onze vakantie in Spanje"
+                                        className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-800 dark:text-white"
+                                    />
+                                </div>
+                                <div className="flex gap-2">
+                                    <button
+                                        type="submit"
+                                        disabled={isCreating}
+                                        className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-500 disabled:opacity-50"
+                                    >
+                                        {isCreating ? 'Aanmaken...' : 'Album Aanmaken'}
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowNewForm(false)}
+                                        className="px-4 py-2 bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-lg hover:bg-slate-300 dark:hover:bg-slate-600"
+                                    >
+                                        Annuleren
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    )}
 
                     {isLoading ? (
                         <div className="flex items-center justify-center h-64">
