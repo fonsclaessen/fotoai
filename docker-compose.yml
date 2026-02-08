@@ -10,4 +10,4 @@ services:
       - DATABASE_URL=file:/app/data/db.sqlite
     volumes:
       - ./data:/app/data
-      - ./public/albums:/app/public/albums
+      - ./albums:/app/public/albums

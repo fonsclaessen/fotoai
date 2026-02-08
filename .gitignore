@@ -7,3 +7,7 @@ node_modules
 
 /src/generated/prisma
 data/
+
+# Ignore album photos
+/public/albums/
+/albums/

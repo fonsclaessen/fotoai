@@ -53,7 +53,7 @@ export async function POST(request: NextRequest) {
         const { title, description, folderName, date } = await request.json();
 
         // Verify the folder exists
-        const folderPath = path.join(process.cwd(), 'public', 'albums', folderName);
+        const folderPath = path.join(process.cwd(), 'albums', folderName);
         if (!fs.existsSync(folderPath)) {
             // Create the folder if it doesn't exist
             fs.mkdirSync(folderPath, { recursive: true });

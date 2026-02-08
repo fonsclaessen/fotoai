@@ -21,6 +21,7 @@ export default function AdminPage() {
     const [newAlbum, setNewAlbum] = useState({ title: '', folderName: '', description: '' });
     const [isCreating, setIsCreating] = useState(false);
     const [message, setMessage] = useState('');
+    const [editingAlbum, setEditingAlbum] = useState<Album | null>(null);
 
     async function fetchAlbums() {
         try {
@@ -66,6 +67,42 @@ export default function AdminPage() {
             console.error(error);
         } finally {
             setIsCreating(false);
+        }
+    }
+
+    function handleEdit(album: Album) {
+        setEditingAlbum({ ...album });
+    }
+
+    function handleCancelEdit() {
+        setEditingAlbum(null);
+    }
+
+    async function handleSaveEdit() {
+        if (!editingAlbum) return;
+
+        setMessage('');
+        try {
+            const response = await fetch(`/api/albums/${editingAlbum.id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    title: editingAlbum.title,
+                    description: editingAlbum.description,
+                }),
+            });
+
+            if (response.ok) {
+                setMessage('✅ Album opgeslagen');
+                setEditingAlbum(null);
+                fetchAlbums();
+            } else {
+                const data = await response.json();
+                setMessage(`❌ Error: ${data.error}`);
+            }
+        } catch (error) {
+            setMessage('❌ Error saving album');
+            console.error(error);
         }
     }
 
