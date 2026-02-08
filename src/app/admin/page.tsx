@@ -236,10 +236,29 @@ export default function AdminPage() {
                                     {albums.map((album) => (
                                         <tr key={album.id} className="hover:bg-slate-50 dark:hover:bg-slate-700/50">
                                             <td className="px-6 py-4">
-                                                <div>
-                                                    <p className="font-medium text-slate-800 dark:text-white">{album.title}</p>
-                                                    <p className="text-sm text-slate-500 dark:text-slate-400">{album.description}</p>
-                                                </div>
+                                                {editingAlbum?.id === album.id ? (
+                                                    <div className="space-y-2">
+                                                        <input
+                                                            type="text"
+                                                            value={editingAlbum.title}
+                                                            onChange={(e) => setEditingAlbum({ ...editingAlbum, title: e.target.value })}
+                                                            className="w-full px-2 py-1 border rounded dark:bg-slate-600 dark:border-slate-500 dark:text-white"
+                                                            placeholder="Album titel"
+                                                        />
+                                                        <input
+                                                            type="text"
+                                                            value={editingAlbum.description || ''}
+                                                            onChange={(e) => setEditingAlbum({ ...editingAlbum, description: e.target.value })}
+                                                            className="w-full px-2 py-1 border rounded dark:bg-slate-600 dark:border-slate-500 dark:text-white text-sm"
+                                                            placeholder="Beschrijving"
+                                                        />
+                                                    </div>
+                                                ) : (
+                                                    <div>
+                                                        <p className="font-medium text-slate-800 dark:text-white">{album.title}</p>
+                                                        <p className="text-sm text-slate-500 dark:text-slate-400">{album.description}</p>
+                                                    </div>
+                                                )}
                                             </td>
                                             <td className="px-6 py-4">
                                                 <code className="text-sm bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded">
@@ -250,12 +269,28 @@ export default function AdminPage() {
                                                 {album.photoCount} foto&apos;s
                                             </td>
                                             <td className="px-6 py-4">
-                                                <Link
-                                                    href={`/admin/albums/${album.id}`}
-                                                    className="px-4 py-2 bg-primary-600 text-white text-sm rounded-lg hover:bg-primary-500"
-                                                >
-                                                    Foto&apos;s Beheren
-                                                </Link>
+                                                {editingAlbum?.id === album.id ? (
+                                                    <div className="flex gap-2">
+                                                        <button onClick={handleSaveEdit} className="px-3 py-1.5 bg-green-600 text-white text-sm rounded-lg hover:bg-green-500">
+                                                            Opslaan
+                                                        </button>
+                                                        <button onClick={handleCancelEdit} className="px-3 py-1.5 bg-slate-200 dark:bg-slate-600 text-slate-700 dark:text-slate-300 text-sm rounded-lg hover:bg-slate-300">
+                                                            Annuleren
+                                                        </button>
+                                                    </div>
+                                                ) : (
+                                                    <div className="flex gap-2">
+                                                        <button onClick={() => handleEdit(album)} className="px-3 py-1.5 bg-amber-500 text-white text-sm rounded-lg hover:bg-amber-400">
+                                                            Bewerken
+                                                        </button>
+                                                        <Link
+                                                            href={`/admin/albums/${album.id}`}
+                                                            className="px-3 py-1.5 bg-primary-600 text-white text-sm rounded-lg hover:bg-primary-500"
+                                                        >
+                                                            Foto&apos;s Beheren
+                                                        </Link>
+                                                    </div>
+                                                )}
                                             </td>
                                         </tr>
                                     ))}

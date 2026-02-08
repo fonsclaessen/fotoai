@@ -1,0 +1,6 @@
+voor het starten van een browser voor de SQLite database:  localhost:5555
+
+docker exec -d photo-albums npx prisma studio --port 5555 --browser none
+
+Dan kun je op de mac localhost:5555 gebruiken om de data te beheren 
+
