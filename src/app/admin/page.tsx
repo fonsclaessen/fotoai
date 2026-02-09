@@ -20,6 +20,7 @@ export default function AdminPage() {
     const [showNewForm, setShowNewForm] = useState(false);
     const [newAlbum, setNewAlbum] = useState({ title: '', folderName: '', description: '' });
     const [isCreating, setIsCreating] = useState(false);
+    const [isSyncing, setIsSyncing] = useState(false);
     const [message, setMessage] = useState('');
     const [editingAlbum, setEditingAlbum] = useState<Album | null>(null);
 
@@ -106,6 +107,33 @@ export default function AdminPage() {
         }
     }
 
+    async function syncAllAlbums() {
+        setIsSyncing(true);
+        setMessage('🔄 Albums synchroniseren...');
+        try {
+            const response = await fetch('/api/albums/sync-all', { method: 'POST' });
+            if (response.ok) {
+                const data = await response.json();
+                const parts = [];
+                if (data.albumsCreated > 0) parts.push(`${data.albumsCreated} album(s) aangemaakt (${data.newAlbumNames.join(', ')})`);
+                if (data.albumsRemoved > 0) parts.push(`${data.albumsRemoved} album(s) verwijderd (${data.removedAlbumNames.join(', ')})`);
+                if (data.photosAdded > 0) parts.push(`${data.photosAdded} foto('s) toegevoegd`);
+                if (data.photosRemoved > 0) parts.push(`${data.photosRemoved} foto('s) verwijderd`);
+                if (parts.length === 0) parts.push('Alles is al gesynchroniseerd');
+                setMessage(`✅ ${parts.join(' • ')} — Totaal: ${data.totalAlbums} albums`);
+                fetchAlbums();
+            } else {
+                const data = await response.json();
+                setMessage(`❌ Sync error: ${data.error}`);
+            }
+        } catch (error) {
+            setMessage('❌ Sync mislukt');
+            console.error(error);
+        } finally {
+            setIsSyncing(false);
+        }
+    }
+
     return (
         <AdminProtectedRoute>
             <div className="min-h-screen bg-slate-100 dark:bg-slate-900">
@@ -121,6 +149,13 @@ export default function AdminPage() {
                             </p>
                         </div>
                         <div className="flex gap-2">
+                            <button
+                                onClick={syncAllAlbums}
+                                disabled={isSyncing}
+                                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-500 disabled:opacity-50"
+                            >
+                                {isSyncing ? '🔄 Bezig...' : '🔄 Sync Alles'}
+                            </button>
                             <button
                                 onClick={() => setShowNewForm(!showNewForm)}
                                 className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-500"
