@@ -57,7 +57,7 @@ export async function GET(
                 photos = imageFiles.map((filename, index) => ({
                     id: `temp-${index}`,
                     filename,
-                    path: `/albums/${album.folderName}/${filename}`,
+                    path: `/albums/${encodeURIComponent(album.folderName)}/${encodeURIComponent(filename)}`,
                     title: filename.replace(/\.[^/.]+$/, ''),
                     width: null,
                     height: null,
@@ -73,8 +73,8 @@ export async function GET(
             photos: photos.map((photo) => ({
                 id: photo.id,
                 filename: photo.filename,
-                src: photo.path.startsWith('/') ? photo.path : `/albums/${album.folderName}/${photo.filename}`,
-                thumbnail: photo.path.startsWith('/') ? photo.path : `/albums/${album.folderName}/${photo.filename}`,
+                src: `/albums/${encodeURIComponent(album.folderName)}/${encodeURIComponent(photo.filename)}`,
+                thumbnail: `/albums/${encodeURIComponent(album.folderName)}/${encodeURIComponent(photo.filename)}`,
                 title: photo.title || photo.filename,
                 width: photo.width || 1200,
                 height: photo.height || 800,

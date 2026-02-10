@@ -111,7 +111,7 @@ export async function POST() {
                 .filter((filename) => !existingFilenames.has(filename))
                 .map((filename) => ({
                     filename,
-                    path: `/albums/${album.folderName}/${filename}`,
+                    path: `/albums/${encodeURIComponent(album.folderName)}/${encodeURIComponent(filename)}`,
                     title: filename.replace(/\.[^/.]+$/, ''),
                     albumId: album.id,
                 }));

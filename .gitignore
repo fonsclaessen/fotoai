@@ -11,3 +11,4 @@ data/
 # Ignore album photos
 /public/albums/
 /albums/
+/dealbums/
