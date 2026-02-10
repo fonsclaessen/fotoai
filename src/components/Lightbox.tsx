@@ -3,6 +3,7 @@
 import { Photo } from '@/data/albums';
 import Image from 'next/image';
 import { useEffect, useCallback, useState } from 'react';
+import { useSwipeable } from 'react-swipeable';
 import CommentsPanel from './CommentsPanel';
 
 interface LightboxProps {
@@ -56,8 +57,22 @@ export default function Lightbox({
         onCommentCountChange?.(currentPhoto.id, count);
     }, [currentPhoto.id, onCommentCountChange]);
 
+    // Swipe handlers
+    const swipeHandlers = useSwipeable({
+        onSwipedLeft: () => {
+            if (currentIndex < photos.length - 1) onNext();
+        },
+        onSwipedRight: () => {
+            if (currentIndex > 0) onPrev();
+        },
+        trackMouse: false,
+        trackTouch: true,
+        preventScrollOnSwipe: true,
+        delta: 30,
+    });
+
     return (
-        <div className="fixed inset-0 z-50 flex flex-col">
+        <div className="fixed inset-0 z-50 flex flex-col" {...swipeHandlers}>
             {/* Backdrop */}
             <div className="absolute inset-0 bg-black/95" />
 
