@@ -22,7 +22,7 @@ export async function GET() {
             if (!coverImage) {
                 const coverPath = path.join(process.cwd(), 'public', 'albums', album.folderName, 'cover.jpg');
                 if (fs.existsSync(coverPath)) {
-                    coverImage = `/albums/${encodeURIComponent(album.folderName)}/cover.jpg`;
+                    coverImage = `/albums/${album.folderName}/cover.jpg`;
                 }
             }
 
