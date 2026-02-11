@@ -146,7 +146,32 @@ export default function Lightbox({
                             className="object-contain"
                             priority
                             sizes="(min-width: 768px) calc(100vw - 352px), 100vw"
+                            quality={75}
                         />
+                        {/* Preload previous image */}
+                        {currentIndex > 0 && (
+                            <Image
+                                src={photos[currentIndex - 1].src}
+                                alt=""
+                                fill
+                                className="invisible"
+                                sizes="(min-width: 768px) calc(100vw - 352px), 100vw"
+                                quality={75}
+                                aria-hidden="true"
+                            />
+                        )}
+                        {/* Preload next image */}
+                        {currentIndex < photos.length - 1 && (
+                            <Image
+                                src={photos[currentIndex + 1].src}
+                                alt=""
+                                fill
+                                className="invisible"
+                                sizes="(min-width: 768px) calc(100vw - 352px), 100vw"
+                                quality={75}
+                                aria-hidden="true"
+                            />
+                        )}
                     </div>
                 </div>
 
