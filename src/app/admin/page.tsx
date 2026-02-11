@@ -136,12 +136,12 @@ export default function AdminPage() {
 
     return (
         <AdminProtectedRoute>
-            <div className="min-h-screen bg-slate-100 dark:bg-slate-900">
+            <div className="min-h-screen" style={{ background: 'var(--neu-base)' }}>
                 <Navbar />
                 <main className="max-w-6xl mx-auto px-4 py-8">
                     <div className="flex items-center justify-between mb-8">
                         <div>
-                            <h1 className="text-2xl sm:text-3xl font-bold text-slate-800 dark:text-white">
+                            <h1 className="text-2xl sm:text-3xl font-bold text-slate-700 dark:text-slate-200">
                                 Admin - Albums Beheren
                             </h1>
                             <p className="text-slate-500 dark:text-slate-400">
@@ -152,19 +152,19 @@ export default function AdminPage() {
                             <button
                                 onClick={syncAllAlbums}
                                 disabled={isSyncing}
-                                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-500 disabled:opacity-50"
+                                className="neu-btn px-4 py-2 text-primary-700 dark:text-primary-400 font-medium disabled:opacity-50"
                             >
                                 {isSyncing ? '🔄 Bezig...' : '🔄 Sync Alles'}
                             </button>
                             <button
                                 onClick={() => setShowNewForm(!showNewForm)}
-                                className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-500"
+                                className="neu-btn px-4 py-2 text-green-700 dark:text-green-400 font-medium"
                             >
                                 + Nieuw Album
                             </button>
                             <Link
                                 href="/albums"
-                                className="px-4 py-2 bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-lg hover:bg-slate-300 dark:hover:bg-slate-600"
+                                className="neu-btn px-4 py-2 text-slate-600 dark:text-slate-300 font-medium"
                             >
                                 ← Terug
                             </Link>
@@ -172,20 +172,20 @@ export default function AdminPage() {
                     </div>
 
                     {message && (
-                        <div className="mb-4 p-4 bg-white dark:bg-slate-800 rounded-lg shadow">
+                        <div className="mb-4 p-4 neu-raised-sm">
                             {message}
                         </div>
                     )}
 
                     {showNewForm && (
-                        <div className="mb-6 p-6 bg-white dark:bg-slate-800 rounded-xl shadow">
-                            <h2 className="text-lg font-semibold text-slate-800 dark:text-white mb-4">
+                        <div className="mb-6 p-6 neu-raised">
+                            <h2 className="text-lg font-semibold text-slate-700 dark:text-slate-200 mb-4">
                                 Nieuw Album Aanmaken
                             </h2>
                             <form onSubmit={createAlbum} className="space-y-4">
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <div>
-                                        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+                                        <label className="block text-sm font-medium text-slate-600 dark:text-slate-300 mb-1">
                                             Titel *
                                         </label>
                                         <input
@@ -193,12 +193,12 @@ export default function AdminPage() {
                                             value={newAlbum.title}
                                             onChange={(e) => setNewAlbum({ ...newAlbum, title: e.target.value })}
                                             placeholder="Vakantie 2025"
-                                            className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-800 dark:text-white"
+                                            className="w-full px-3 py-2 neu-input text-slate-700 dark:text-slate-200"
                                             required
                                         />
                                     </div>
                                     <div>
-                                        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+                                        <label className="block text-sm font-medium text-slate-600 dark:text-slate-300 mb-1">
                                             Folder Naam * <span className="text-xs text-slate-500">(exact zoals in public/albums/)</span>
                                         </label>
                                         <input
@@ -206,13 +206,13 @@ export default function AdminPage() {
                                             value={newAlbum.folderName}
                                             onChange={(e) => setNewAlbum({ ...newAlbum, folderName: e.target.value })}
                                             placeholder="Album4"
-                                            className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-800 dark:text-white"
+                                            className="w-full px-3 py-2 neu-input text-slate-700 dark:text-slate-200"
                                             required
                                         />
                                     </div>
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+                                    <label className="block text-sm font-medium text-slate-600 dark:text-slate-300 mb-1">
                                         Beschrijving
                                     </label>
                                     <input
@@ -220,21 +220,21 @@ export default function AdminPage() {
                                         value={newAlbum.description}
                                         onChange={(e) => setNewAlbum({ ...newAlbum, description: e.target.value })}
                                         placeholder="Foto's van onze vakantie in Spanje"
-                                        className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-800 dark:text-white"
+                                        className="w-full px-3 py-2 neu-input text-slate-700 dark:text-slate-200"
                                     />
                                 </div>
                                 <div className="flex gap-2">
                                     <button
                                         type="submit"
                                         disabled={isCreating}
-                                        className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-500 disabled:opacity-50"
+                                        className="neu-btn px-4 py-2 text-primary-700 dark:text-primary-400 font-medium disabled:opacity-50"
                                     >
                                         {isCreating ? 'Aanmaken...' : 'Album Aanmaken'}
                                     </button>
                                     <button
                                         type="button"
                                         onClick={() => setShowNewForm(false)}
-                                        className="px-4 py-2 bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-lg hover:bg-slate-300 dark:hover:bg-slate-600"
+                                        className="neu-btn px-4 py-2 text-slate-600 dark:text-slate-300"
                                     >
                                         Annuleren
                                     </button>
@@ -245,19 +245,21 @@ export default function AdminPage() {
 
                     {isLoading ? (
                         <div className="flex items-center justify-center h-64">
-                            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary-500"></div>
+                            <div className="neu-circle p-4">
+                                <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-primary-500"></div>
+                            </div>
                         </div>
                     ) : albums.length === 0 ? (
-                        <div className="text-center py-16 bg-white dark:bg-slate-800 rounded-xl">
+                        <div className="text-center py-16 neu-raised">
                             <p className="text-slate-500 dark:text-slate-400">
                                 Geen albums gevonden. Voeg albums toe via Prisma Studio.
                             </p>
-                            <code className="block mt-4 text-sm bg-slate-200 dark:bg-slate-700 px-4 py-2 rounded">
+                            <code className="block mt-4 text-sm neu-inset-sm inline-block px-4 py-2">
                                 npm run db:studio
                             </code>
                         </div>
                     ) : (
-                        <div className="bg-white dark:bg-slate-800 rounded-xl shadow overflow-hidden">
+                        <div className="neu-raised overflow-hidden">
                             <table className="w-full">
                                 <thead className="bg-slate-50 dark:bg-slate-700">
                                     <tr>
@@ -306,21 +308,21 @@ export default function AdminPage() {
                                             <td className="px-6 py-4">
                                                 {editingAlbum?.id === album.id ? (
                                                     <div className="flex gap-2">
-                                                        <button onClick={handleSaveEdit} className="px-3 py-1.5 bg-green-600 text-white text-sm rounded-lg hover:bg-green-500">
+                                                        <button onClick={handleSaveEdit} className="neu-btn px-3 py-1.5 text-green-700 dark:text-green-400 text-sm font-medium">
                                                             Opslaan
                                                         </button>
-                                                        <button onClick={handleCancelEdit} className="px-3 py-1.5 bg-slate-200 dark:bg-slate-600 text-slate-700 dark:text-slate-300 text-sm rounded-lg hover:bg-slate-300">
+                                                        <button onClick={handleCancelEdit} className="neu-btn px-3 py-1.5 text-slate-600 dark:text-slate-300 text-sm">
                                                             Annuleren
                                                         </button>
                                                     </div>
                                                 ) : (
                                                     <div className="flex gap-2">
-                                                        <button onClick={() => handleEdit(album)} className="px-3 py-1.5 bg-amber-500 text-white text-sm rounded-lg hover:bg-amber-400">
+                                                        <button onClick={() => handleEdit(album)} className="neu-btn px-3 py-1.5 text-amber-600 dark:text-amber-400 text-sm font-medium">
                                                             Bewerken
                                                         </button>
                                                         <Link
                                                             href={`/admin/albums/${album.id}`}
-                                                            className="px-3 py-1.5 bg-primary-600 text-white text-sm rounded-lg hover:bg-primary-500"
+                                                            className="neu-btn inline-block px-3 py-1.5 text-primary-700 dark:text-primary-400 text-sm font-medium"
                                                         >
                                                             Foto&apos;s Beheren
                                                         </Link>
@@ -335,8 +337,8 @@ export default function AdminPage() {
                     )}
 
                     {/* Help Section */}
-                    <div className="mt-8 p-6 bg-white dark:bg-slate-800 rounded-xl shadow">
-                        <h2 className="text-lg font-semibold text-slate-800 dark:text-white mb-4">
+                    <div className="mt-8 p-6 neu-raised">
+                        <h2 className="text-lg font-semibold text-slate-700 dark:text-slate-200 mb-4">
                             📖 Hoe werkt het?
                         </h2>
                         <ol className="list-decimal list-inside space-y-2 text-slate-600 dark:text-slate-400">

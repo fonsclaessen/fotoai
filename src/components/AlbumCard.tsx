@@ -15,8 +15,8 @@ export default function AlbumCard({ album }: AlbumCardProps) {
 
     return (
         <Link href={`/albums/${album.id}`}>
-            <div className="group bg-white dark:bg-slate-800 rounded-2xl shadow-lg overflow-hidden transform transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl cursor-pointer">
-                <div className="relative aspect-[4/3] overflow-hidden bg-gradient-to-br from-primary-100 to-primary-200 dark:from-slate-700 dark:to-slate-600">
+            <div className="group neu-raised overflow-hidden transform transition-all duration-300 hover:scale-[1.02] cursor-pointer">
+                <div className="relative aspect-[4/3] overflow-hidden neu-inset-sm m-3">
                     {hasValidCover ? (
                         <Image
                             src={album.coverImage}
@@ -64,7 +64,7 @@ export default function AlbumCard({ album }: AlbumCardProps) {
                     </div>
                 </div>
                 <div className="p-4 sm:p-5">
-                    <h3 className="text-lg sm:text-xl font-semibold text-slate-800 dark:text-white mb-1 line-clamp-1">
+                    <h3 className="text-lg sm:text-xl font-semibold text-slate-700 dark:text-slate-200 mb-1 line-clamp-1">
                         {album.title}
                     </h3>
                     <p className="text-sm text-slate-500 dark:text-slate-400 line-clamp-2 mb-3">

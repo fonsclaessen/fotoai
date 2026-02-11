@@ -36,13 +36,13 @@ export default function AlbumsPage() {
 
     return (
         <ProtectedRoute>
-            <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800">
+            <div className="min-h-screen" style={{ background: 'var(--neu-base)' }}>
                 <Navbar />
 
                 <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
                     {/* Header */}
                     <div className="mb-8 sm:mb-12">
-                        <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-slate-800 dark:text-white mb-3">
+                        <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-slate-700 dark:text-slate-200 mb-3">
                             Your Albums
                         </h1>
                         <p className="text-slate-500 dark:text-slate-400 text-base sm:text-lg">
@@ -52,19 +52,19 @@ export default function AlbumsPage() {
 
                     {/* Stats */}
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8 sm:mb-12">
-                        <div className="bg-white dark:bg-slate-800 rounded-2xl p-4 sm:p-6 shadow-sm">
+                        <div className="neu-raised p-4 sm:p-6">
                             <p className="text-2xl sm:text-3xl font-bold text-primary-600">{albums.length}</p>
                             <p className="text-sm text-slate-500 dark:text-slate-400">Total Albums</p>
                         </div>
-                        <div className="bg-white dark:bg-slate-800 rounded-2xl p-4 sm:p-6 shadow-sm">
+                        <div className="neu-raised p-4 sm:p-6">
                             <p className="text-2xl sm:text-3xl font-bold text-primary-600">{totalPhotos}</p>
                             <p className="text-sm text-slate-500 dark:text-slate-400">Total Photos</p>
                         </div>
-                        <div className="bg-white dark:bg-slate-800 rounded-2xl p-4 sm:p-6 shadow-sm">
+                        <div className="neu-raised p-4 sm:p-6">
                             <p className="text-2xl sm:text-3xl font-bold text-primary-600">{latestYear}</p>
                             <p className="text-sm text-slate-500 dark:text-slate-400">Latest Year</p>
                         </div>
-                        <div className="bg-white dark:bg-slate-800 rounded-2xl p-4 sm:p-6 shadow-sm">
+                        <div className="neu-raised p-4 sm:p-6">
                             <p className="text-2xl sm:text-3xl font-bold text-primary-600">HD</p>
                             <p className="text-sm text-slate-500 dark:text-slate-400">Photo Quality</p>
                         </div>
@@ -73,7 +73,9 @@ export default function AlbumsPage() {
                     {/* Album Grid */}
                     {isLoading ? (
                         <div className="flex items-center justify-center h-64">
-                            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary-500"></div>
+                            <div className="neu-circle p-4">
+                                <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-primary-500"></div>
+                            </div>
                         </div>
                     ) : albums.length === 0 ? (
                         <div className="text-center py-16">

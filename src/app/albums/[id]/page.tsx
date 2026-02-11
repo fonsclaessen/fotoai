@@ -147,10 +147,12 @@ export default function AlbumDetailPage() {
     if (isLoading) {
         return (
             <ProtectedRoute>
-                <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800">
+                <div className="min-h-screen" style={{ background: 'var(--neu-base)' }}>
                     <Navbar />
                     <div className="flex items-center justify-center h-[60vh]">
-                        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary-500"></div>
+                        <div className="neu-circle p-4">
+                            <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-primary-500"></div>
+                        </div>
                     </div>
                 </div>
             </ProtectedRoute>
@@ -160,11 +162,11 @@ export default function AlbumDetailPage() {
     if (!album) {
         return (
             <ProtectedRoute>
-                <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800">
+                <div className="min-h-screen" style={{ background: 'var(--neu-base)' }}>
                     <Navbar />
                     <div className="flex items-center justify-center h-[60vh]">
                         <div className="text-center">
-                            <h2 className="text-2xl font-semibold text-slate-800 dark:text-white mb-4">
+                            <h2 className="text-2xl font-semibold text-slate-700 dark:text-slate-200 mb-4">
                                 Album not found
                             </h2>
                             <Link
@@ -182,7 +184,7 @@ export default function AlbumDetailPage() {
 
     return (
         <ProtectedRoute>
-            <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800">
+            <div className="min-h-screen" style={{ background: 'var(--neu-base)' }}>
                 <Navbar />
 
                 <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
@@ -211,7 +213,7 @@ export default function AlbumDetailPage() {
 
                     {/* Album Header */}
                     <div className="mb-6 sm:mb-8">
-                        <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-slate-800 dark:text-white mb-2">
+                        <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-slate-700 dark:text-slate-200 mb-2">
                             {album.title}
                         </h1>
                         <div className="flex flex-wrap items-center gap-4 text-sm text-slate-500 dark:text-slate-400">
@@ -276,9 +278,9 @@ export default function AlbumDetailPage() {
                         </div>
                         <button
                             onClick={toggleSelectionMode}
-                            className={`p-2 rounded-lg transition-colors ${selectionMode
-                                ? 'bg-primary-100 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400'
-                                : 'text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700'
+                            className={`neu-btn p-2 transition-all ${selectionMode
+                                ? 'neu-btn-pressed text-primary-600 dark:text-primary-400'
+                                : 'text-slate-500 dark:text-slate-400'
                                 }`}
                             title={selectionMode ? 'Annuleer selectie' : 'Selecteer foto\'s'}
                         >
@@ -312,15 +314,15 @@ export default function AlbumDetailPage() {
 
                 {/* Floating download bar */}
                 {selectionMode && selectedPhotos.size > 0 && (
-                    <div className="fixed bottom-0 left-0 right-0 z-40 bg-white/95 dark:bg-slate-800/95 backdrop-blur-sm border-t border-slate-200 dark:border-slate-700 px-4 py-3 sm:py-4">
-                        <div className="max-w-7xl mx-auto flex items-center justify-between">
+                    <div className="fixed bottom-0 left-0 right-0 z-40 py-3 sm:py-4 px-4" style={{ background: 'var(--neu-base)' }}>
+                        <div className="max-w-7xl mx-auto neu-raised flex items-center justify-between p-4">
                             <span className="text-sm sm:text-base font-medium text-slate-700 dark:text-slate-200">
                                 {selectedPhotos.size} foto{selectedPhotos.size !== 1 ? '\'s' : ''} geselecteerd
                             </span>
                             <button
                                 onClick={downloadSelected}
                                 disabled={isDownloading}
-                                className="inline-flex items-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-700 disabled:bg-primary-400 text-white rounded-lg font-medium transition-colors"
+                                className="neu-btn inline-flex items-center gap-2 px-4 py-2 text-primary-700 dark:text-primary-400 font-medium disabled:opacity-40"
                             >
                                 {isDownloading ? (
                                     <>

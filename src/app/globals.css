@@ -3,24 +3,24 @@
 @tailwind utilities;
 
 :root {
-    --foreground-rgb: 0, 0, 0;
-    --background-start-rgb: 250, 250, 252;
-    --background-end-rgb: 240, 240, 245;
+    --neu-base: #e0e5ec;
+    --neu-light: #ffffff;
+    --neu-dark: #a3b1c6;
+    --foreground-rgb: 55, 65, 81;
 }
 
 @media (prefers-color-scheme: dark) {
     :root {
-        --foreground-rgb: 255, 255, 255;
-        --background-start-rgb: 15, 23, 42;
-        --background-end-rgb: 30, 41, 59;
+        --neu-base: #2d3748;
+        --neu-light: #3a4556;
+        --neu-dark: #1a202c;
+        --foreground-rgb: 226, 232, 240;
     }
 }
 
 body {
     color: rgb(var(--foreground-rgb));
-    background: linear-gradient(to bottom,
-            transparent,
-            rgb(var(--background-end-rgb))) rgb(var(--background-start-rgb));
+    background: var(--neu-base);
     min-height: 100vh;
 }
 
@@ -30,24 +30,97 @@ body {
     }
 }
 
-/* Custom scrollbar */
+/* Neumorphic utility classes */
+@layer components {
+    .neu-raised {
+        background: var(--neu-base);
+        box-shadow: 6px 6px 12px var(--neu-dark), -6px -6px 12px var(--neu-light);
+        border-radius: 1rem;
+    }
+
+    .neu-raised-sm {
+        background: var(--neu-base);
+        box-shadow: 3px 3px 6px var(--neu-dark), -3px -3px 6px var(--neu-light);
+        border-radius: 0.75rem;
+    }
+
+    .neu-raised-lg {
+        background: var(--neu-base);
+        box-shadow: 10px 10px 20px var(--neu-dark), -10px -10px 20px var(--neu-light);
+        border-radius: 1.5rem;
+    }
+
+    .neu-inset {
+        background: var(--neu-base);
+        box-shadow: inset 4px 4px 8px var(--neu-dark), inset -4px -4px 8px var(--neu-light);
+        border-radius: 1rem;
+    }
+
+    .neu-inset-sm {
+        background: var(--neu-base);
+        box-shadow: inset 2px 2px 4px var(--neu-dark), inset -2px -2px 4px var(--neu-light);
+        border-radius: 0.75rem;
+    }
+
+    .neu-flat {
+        background: var(--neu-base);
+        box-shadow: none;
+    }
+
+    .neu-btn {
+        background: var(--neu-base);
+        box-shadow: 4px 4px 8px var(--neu-dark), -4px -4px 8px var(--neu-light);
+        border-radius: 0.75rem;
+        transition: all 0.2s ease;
+    }
+
+    .neu-btn:hover {
+        box-shadow: 2px 2px 4px var(--neu-dark), -2px -2px 4px var(--neu-light);
+    }
+
+    .neu-btn:active,
+    .neu-btn-pressed {
+        box-shadow: inset 2px 2px 4px var(--neu-dark), inset -2px -2px 4px var(--neu-light);
+    }
+
+    .neu-input {
+        background: var(--neu-base);
+        box-shadow: inset 3px 3px 6px var(--neu-dark), inset -3px -3px 6px var(--neu-light);
+        border-radius: 0.75rem;
+        border: none;
+        outline: none;
+        transition: all 0.2s ease;
+    }
+
+    .neu-input:focus {
+        box-shadow: inset 4px 4px 8px var(--neu-dark), inset -4px -4px 8px var(--neu-light);
+    }
+
+    .neu-circle {
+        background: var(--neu-base);
+        box-shadow: 4px 4px 8px var(--neu-dark), -4px -4px 8px var(--neu-light);
+        border-radius: 9999px;
+    }
+}
+
+/* Custom scrollbar - neumorphic style */
 ::-webkit-scrollbar {
     width: 8px;
     height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-    background: rgba(0, 0, 0, 0.1);
+    background: var(--neu-base);
     border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb {
-    background: rgba(0, 0, 0, 0.2);
+    background: var(--neu-dark);
     border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: rgba(0, 0, 0, 0.3);
+    background: #8a98ab;
 }
 
 /* Image loading animation */
@@ -62,7 +135,7 @@ body {
 }
 
 .image-loading {
-    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background: linear-gradient(90deg, var(--neu-base) 25%, var(--neu-dark) 50%, var(--neu-base) 75%);
     background-size: 200% 100%;
     animation: shimmer 1.5s infinite;
 }

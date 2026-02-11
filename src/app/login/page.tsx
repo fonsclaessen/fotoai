@@ -43,19 +43,13 @@ export default function LoginPage() {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-primary-900 to-slate-900 px-4">
-            {/* Background decorations */}
-            <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                <div className="absolute -top-40 -right-40 w-80 h-80 bg-primary-500/20 rounded-full blur-3xl" />
-                <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-primary-600/20 rounded-full blur-3xl" />
-            </div>
-
+        <div className="min-h-screen flex items-center justify-center px-4" style={{ background: 'var(--neu-base)' }}>
             <div className="w-full max-w-md relative">
                 {/* Logo and title */}
                 <div className="text-center mb-8">
-                    <div className="inline-flex items-center justify-center w-16 h-16 bg-primary-500/20 rounded-2xl mb-4">
+                    <div className="inline-flex items-center justify-center w-16 h-16 neu-circle mb-4">
                         <svg
-                            className="w-10 h-10 text-primary-400"
+                            className="w-10 h-10 text-primary-600"
                             fill="none"
                             stroke="currentColor"
                             viewBox="0 0 24 24"
@@ -68,20 +62,20 @@ export default function LoginPage() {
                             />
                         </svg>
                     </div>
-                    <h1 className="text-3xl sm:text-4xl font-bold text-white mb-2">PhotoAlbums</h1>
-                    <p className="text-slate-400">
+                    <h1 className="text-3xl sm:text-4xl font-bold text-slate-700 dark:text-slate-200 mb-2">PhotoAlbums</h1>
+                    <p className="text-slate-500">
                         {isRegister ? 'Create your account' : 'Sign in to access your memories'}
                     </p>
                 </div>
 
                 {/* Login/Register form */}
-                <div className="bg-white/10 backdrop-blur-lg rounded-3xl p-6 sm:p-8 shadow-2xl border border-white/10">
+                <div className="neu-raised-lg p-6 sm:p-8">
                     <form onSubmit={handleSubmit} className="space-y-5">
                         {isRegister && (
                             <div>
                                 <label
                                     htmlFor="name"
-                                    className="block text-sm font-medium text-slate-300 mb-2"
+                                    className="block text-sm font-medium text-slate-600 dark:text-slate-300 mb-2"
                                 >
                                     Name
                                 </label>
@@ -91,7 +85,7 @@ export default function LoginPage() {
                                     value={name}
                                     onChange={(e) => setName(e.target.value)}
                                     required={isRegister}
-                                    className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
+                                    className="w-full px-4 py-3 neu-input text-slate-700 dark:text-slate-200 placeholder-slate-400"
                                     placeholder="Your name"
                                 />
                             </div>
@@ -100,7 +94,7 @@ export default function LoginPage() {
                         <div>
                             <label
                                 htmlFor="email"
-                                className="block text-sm font-medium text-slate-300 mb-2"
+                                className="block text-sm font-medium text-slate-600 dark:text-slate-300 mb-2"
                             >
                                 Email Address
                             </label>
@@ -110,7 +104,7 @@ export default function LoginPage() {
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 required
-                                className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
+                                className="w-full px-4 py-3 neu-input text-slate-700 dark:text-slate-200 placeholder-slate-400"
                                 placeholder="you@example.com"
                             />
                         </div>
@@ -118,7 +112,7 @@ export default function LoginPage() {
                         <div>
                             <label
                                 htmlFor="password"
-                                className="block text-sm font-medium text-slate-300 mb-2"
+                                className="block text-sm font-medium text-slate-600 dark:text-slate-300 mb-2"
                             >
                                 Password
                             </label>
@@ -129,21 +123,21 @@ export default function LoginPage() {
                                 onChange={(e) => setPassword(e.target.value)}
                                 required
                                 minLength={4}
-                                className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
+                                className="w-full px-4 py-3 neu-input text-slate-700 dark:text-slate-200 placeholder-slate-400"
                                 placeholder={isRegister ? 'Choose a password (min 4 chars)' : 'Enter your password'}
                             />
                         </div>
 
                         {error && (
-                            <div className="p-3 rounded-lg bg-red-500/20 border border-red-500/30">
-                                <p className="text-sm text-red-300">{error}</p>
+                            <div className="p-3 neu-inset-sm">
+                                <p className="text-sm text-red-500">{error}</p>
                             </div>
                         )}
 
                         <button
                             type="submit"
                             disabled={isLoading}
-                            className="w-full py-3 px-4 bg-gradient-to-r from-primary-600 to-primary-500 hover:from-primary-500 hover:to-primary-400 text-white font-semibold rounded-xl shadow-lg shadow-primary-500/25 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-[1.02] active:scale-[0.98]"
+                            className="w-full py-3 px-4 neu-btn text-primary-700 dark:text-primary-400 font-semibold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                             {isLoading ? (
                                 <span className="flex items-center justify-center">
@@ -176,8 +170,8 @@ export default function LoginPage() {
                     </form>
 
                     {/* Toggle between login and register */}
-                    <div className="mt-6 pt-6 border-t border-white/10">
-                        <p className="text-center text-sm text-slate-400">
+                    <div className="mt-6 pt-6 border-t border-slate-300/30 dark:border-slate-600/30">
+                        <p className="text-center text-sm text-slate-500">
                             {isRegister ? (
                                 <>
                                     Already have an account?{' '}
@@ -187,7 +181,7 @@ export default function LoginPage() {
                                             setIsRegister(false);
                                             setError('');
                                         }}
-                                        className="text-primary-400 hover:text-primary-300 font-medium"
+                                        className="text-primary-600 hover:text-primary-500 font-medium"
                                     >
                                         Sign in
                                     </button>
@@ -201,7 +195,7 @@ export default function LoginPage() {
                                             setIsRegister(true);
                                             setError('');
                                         }}
-                                        className="text-primary-400 hover:text-primary-300 font-medium"
+                                        className="text-primary-600 hover:text-primary-500 font-medium"
                                     >
                                         Register
                                     </button>
@@ -212,7 +206,7 @@ export default function LoginPage() {
                 </div>
 
                 {/* Footer */}
-                <p className="mt-8 text-center text-sm text-slate-500">
+                <p className="mt-8 text-center text-sm text-slate-400">
                     © 2025 PhotoAlbums. All rights reserved.
                 </p>
             </div>

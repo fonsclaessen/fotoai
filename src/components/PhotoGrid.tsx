@@ -27,13 +27,13 @@ export default function PhotoGrid({
     };
 
     return (
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 sm:gap-3 md:gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4 md:gap-5">
             {photos.map((photo, index) => {
                 const isSelected = selectedPhotos.has(photo.id);
                 return (
                     <div
                         key={photo.id}
-                        className={`relative aspect-square overflow-hidden rounded-lg sm:rounded-xl cursor-pointer group ${selectionMode && isSelected ? 'ring-3 ring-primary-500 ring-offset-2' : ''
+                        className={`relative aspect-square overflow-hidden neu-raised-sm p-1.5 cursor-pointer group transition-all duration-200 ${selectionMode && isSelected ? 'neu-inset-sm' : ''
                             }`}
                         onClick={() => handleClick(photo, index)}
                     >
@@ -74,9 +74,9 @@ export default function PhotoGrid({
                         {/* Hover overlay (only when not in selection mode) */}
                         {!selectionMode && (
                             <>
-                                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300" />
+                                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/15 transition-colors duration-300 rounded-lg" />
                                 <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                    <div className="bg-white/90 dark:bg-slate-800/90 rounded-full p-2">
+                                    <div className="neu-circle p-2">
                                         <svg
                                             className="w-5 h-5 sm:w-6 sm:h-6 text-slate-700 dark:text-white"
                                             fill="none"
